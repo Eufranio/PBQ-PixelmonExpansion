@@ -14,7 +14,7 @@ import org.spongepowered.api.plugin.Plugin;
 
 @Plugin(
         id = "pbq-pixelmonexpansion",
-        name = "PBQ PixelmonExpansion",
+        name = "PBQ PixelmonExpansion reforged",
         description = "PixelBuiltQuests expansion for pixelmon tasks/rewards",
         authors = {
                 "Eufranio"

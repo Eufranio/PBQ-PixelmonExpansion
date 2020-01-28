@@ -1,7 +1,7 @@
 package io.github.eufranio.pbqpixelmonexpansion.tasks;
 
-import com.pixelmonmod.pixelmon.Pixelmon;
-import com.pixelmonmod.pixelmon.storage.PlayerPartyStorage;
+import com.pixelmonmod.pixelmon.storage.PixelmonStorage;
+import com.pixelmonmod.pixelmon.storage.PlayerStorage;
 import ninja.leaping.configurate.objectmapping.Setting;
 import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
 import online.pixelbuilt.pbquests.quest.Quest;
@@ -20,7 +20,7 @@ public class TotalPokemonTask implements BaseTask {
 
     @Override
     public boolean check(Player player, Quest quest, QuestLine line, int questId) {
-        PlayerPartyStorage storage = Pixelmon.storageManager.getParty(player.getUniqueId());
+        PlayerStorage storage = PixelmonStorage.pokeBallManager.getPlayerStorageFromUUID(player.getUniqueId()).get();
         return storage.pokedex.countCaught() >= requiredPokemon;
     }
 

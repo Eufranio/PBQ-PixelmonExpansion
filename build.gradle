@@ -23,7 +23,7 @@ version = pluginVersion
 
 dependencies {
     compile 'org.spongepowered:spongeapi:7.1.0-SNAPSHOT'
-    compile files('Pixelmon-1.12.2-7.0.6-server-deobf.jar')
+    compile files('Pixelmon-1.12.2-6.3.4-server-QOL1.jar')
     implementation 'com.github.Eufranio:PixelBuilt-Quests:api7-SNAPSHOT'
 }
 

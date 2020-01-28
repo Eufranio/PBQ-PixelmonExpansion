@@ -1,7 +1,7 @@
 package io.github.eufranio.pbqpixelmonexpansion.tasks;
 
 import com.google.common.collect.Maps;
-import com.pixelmonmod.pixelmon.enums.EnumSpecies;
+import com.pixelmonmod.pixelmon.enums.EnumPokemon;
 import ninja.leaping.configurate.objectmapping.Setting;
 import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
 import online.pixelbuilt.pbquests.quest.Quest;
@@ -28,11 +28,11 @@ public class CatchingTask implements BaseTask<CatchingTask> {
     @Setting(comment = "checking mode. 1 = any pokemon, 2 = exact pokemon")
     public int mode = 1;
 
-    public static Map<UUID, Map<EnumSpecies, Integer>> caught = Maps.newHashMap();
+    public static Map<UUID, Map<EnumPokemon, Integer>> caught = Maps.newHashMap();
 
     @Override
     public boolean check(Player player, Quest quest, QuestLine line, int questId) {
-        EnumSpecies poke = EnumSpecies.getFromNameAnyCase(this.pokemonName);
+        EnumPokemon poke = EnumPokemon.getFromNameAnyCase(this.pokemonName);
 
         if (mode == 1) {
             return caught.getOrDefault(player.getUniqueId(), new HashMap<>()).values().stream().mapToInt(i -> i).sum() >= count;

@@ -1,9 +1,6 @@
 package io.github.eufranio.pbqpixelmonexpansion.tasks;
 
-import com.google.common.collect.Streams;
-import com.pixelmonmod.pixelmon.Pixelmon;
 import com.pixelmonmod.pixelmon.storage.*;
-import net.minecraft.entity.player.EntityPlayerMP;
 import ninja.leaping.configurate.objectmapping.Setting;
 import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
 import online.pixelbuilt.pbquests.quest.Quest;
@@ -30,15 +27,13 @@ public class PokemonLevelTask implements BaseTask {
 
     @Override
     public boolean check(Player player, Quest quest, QuestLine line, int questId) {
-        PlayerPartyStorage storage = Pixelmon.storageManager.getParty(player.getUniqueId());
+        PlayerStorage storage = PixelmonStorage.pokeBallManager.getPlayerStorageFromUUID(player.getUniqueId()).get();
         if (mode == 1) {
-            return Streams.concat(Arrays.stream(storage.getAll()),
-                    Arrays.stream(Pixelmon.storageManager.getPCForPlayer(player.getUniqueId()).getAll()))
-                    .anyMatch(poke -> poke.getLevel() >= level);
+            return Arrays.stream(storage.partyPokemon)
+                    .anyMatch(nbt -> nbt.getInteger(NbtKeys.LEVEL) >= level);
         } else {
-            return Streams.concat(Arrays.stream(storage.getAll()),
-                    Arrays.stream(Pixelmon.storageManager.getPCForPlayer(player.getUniqueId()).getAll()))
-                    .anyMatch(poke -> poke.getLevel() >= level && poke.getSpecies().getPokemonName().equalsIgnoreCase(pokemon));
+            return Arrays.stream(storage.partyPokemon)
+                    .anyMatch(nbt -> nbt.getInteger(NbtKeys.LEVEL) >= level && nbt.getString(NbtKeys.NAME).equalsIgnoreCase(pokemon));
         }
     }
 

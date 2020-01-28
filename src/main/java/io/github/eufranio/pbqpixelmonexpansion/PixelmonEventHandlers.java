@@ -3,7 +3,7 @@ package io.github.eufranio.pbqpixelmonexpansion;
 import com.pixelmonmod.pixelmon.api.events.BeatTrainerEvent;
 import com.pixelmonmod.pixelmon.api.events.CaptureEvent;
 import com.pixelmonmod.pixelmon.api.events.NPCChatEvent;
-import com.pixelmonmod.pixelmon.enums.EnumSpecies;
+import com.pixelmonmod.pixelmon.enums.EnumPokemon;
 import io.github.eufranio.pbqpixelmonexpansion.tasks.CatchingTask;
 import io.github.eufranio.pbqpixelmonexpansion.tasks.ChattingTask;
 import io.github.eufranio.pbqpixelmonexpansion.tasks.DefeatTrainerTask;
@@ -20,15 +20,15 @@ public class PixelmonEventHandlers {
 
     @SubscribeEvent
     public void onCatch(CaptureEvent.SuccessfulCapture event) {
-        Map<EnumSpecies, Integer> map = CatchingTask.caught.computeIfAbsent(event.player.getUniqueID(), uuid -> new HashMap<>());
-        map.compute(event.getPokemon().getPokemonData().getSpecies(), (poke, value) -> {
+        Map<EnumPokemon, Integer> map = CatchingTask.caught.computeIfAbsent(event.player.getUniqueID(), uuid -> new HashMap<>());
+        map.compute(event.getPokemon().getSpecies(), (poke, value) -> {
             if (value == null) {
                 return 1;
             } else {
                 return ++value;
             }
         });
-        PokemonNatureTask.natures.put(event.player.getUniqueID(), event.getPokemon().getPokemonData().getNature());
+        PokemonNatureTask.natures.put(event.player.getUniqueID(), event.getPokemon().getNature());
     }
 
     @SubscribeEvent
