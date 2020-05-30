@@ -1,7 +1,7 @@
 package io.github.eufranio.pbqpixelmonexpansion.tasks;
 
-import io.github.eufranio.pbqpixelmonexpansion.CheckMode;
 import io.github.eufranio.pbqpixelmonexpansion.PBQPixelmonExpansion;
+import io.github.eufranio.pbqpixelmonexpansion.common.CheckMode;
 import ninja.leaping.configurate.objectmapping.Setting;
 import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
 import online.pixelbuilt.pbquests.quest.Quest;

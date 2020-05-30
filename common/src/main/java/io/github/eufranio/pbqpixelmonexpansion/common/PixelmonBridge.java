@@ -1,4 +1,4 @@
-package io.github.eufranio.pbqpixelmonexpansion;
+package io.github.eufranio.pbqpixelmonexpansion.common;
 
 import org.spongepowered.api.entity.living.player.User;
 

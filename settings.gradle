@@ -1,4 +1,5 @@
-rootProject.name = 'root'
+rootProject.name = 'PBQ-PixelmonExpansion'
 include 'reforged'
 include 'generations'
+include 'common'
 

@@ -2,12 +2,12 @@ plugins {
     id 'java'
 }
 
-group 'io.github.eufranio'
+group 'io.github.eufranio.pbqpixelmonexpansion.generations'
 version rootProject.version
 
 def generationsVersion = '1.12.2-2.9.3'
 
 dependencies {
-    compile rootProject
+    compile project(':common')
     compileOnly files('lib/PixelmonGenerations-' + generationsVersion + '-universal.jar')
 }

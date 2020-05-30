@@ -13,6 +13,7 @@ buildscript {
 
 plugins {
     id 'org.spongepowered.plugin' version '0.9.0'
+    id 'com.github.johnrengelman.shadow' version '4.0.3'
 }
 
 allprojects {
@@ -36,6 +37,19 @@ allprojects {
         mappings = 'stable_39'
     }
 }
+
+dependencies {
+    shadow project(':reforged')
+    shadow project(':generations')
+}
+
+shadowJar {
+    configurations = [project.configurations.shadow]
+    classifier = null
+    from sourceSets.main.output
+}
+
+build.dependsOn shadowJar
 
 group = pluginGroup
 version = pluginVersion

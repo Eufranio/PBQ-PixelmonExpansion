@@ -1,6 +1,7 @@
 package io.github.eufranio.pbqpixelmonexpansion;
 
 import com.google.inject.Inject;
+import io.github.eufranio.pbqpixelmonexpansion.common.PixelmonBridge;
 import io.github.eufranio.pbqpixelmonexpansion.tasks.*;
 import online.pixelbuilt.pbquests.task.TaskType;
 import org.slf4j.Logger;
@@ -45,10 +46,10 @@ public class PBQPixelmonExpansion {
 
         try {
             Class.forName("com.pixelmonmod.pixelmon.api.pokemon.Pokemon");
-            bridge = (PixelmonBridge) Class.forName("io.github.eufranio.reforged.ReforgedBridge").newInstance();
+            bridge = (PixelmonBridge) Class.forName("io.github.eufranio.pbqpixelmonexpansion.reforged.ReforgedBridge").newInstance();
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
             try {
-                bridge = (PixelmonBridge) Class.forName("io.github.eufranio.generations.GenerationsBridge").newInstance();
+                bridge = (PixelmonBridge) Class.forName("io.github.eufranio.pbqpixelmonexpansion.generations.GenerationsBridge").newInstance();
             } catch (InstantiationException | IllegalAccessException | ClassNotFoundException ex) {
                 logger.error("PBQ Pixelmon Expansion could not load the Pixelmon bridge!");
             }

@@ -1,4 +1,4 @@
-package io.github.eufranio.pbqpixelmonexpansion.events;
+package io.github.eufranio.pbqpixelmonexpansion.common.events;
 
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
