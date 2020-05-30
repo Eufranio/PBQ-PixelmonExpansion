@@ -1,0 +1,13 @@
+plugins {
+    id 'java'
+}
+
+group 'io.github.eufranio'
+version rootProject.version
+
+def generationsVersion = '1.12.2-2.9.3'
+
+dependencies {
+    compile rootProject
+    compileOnly files('lib/PixelmonGenerations-' + generationsVersion + '-universal.jar')
+}

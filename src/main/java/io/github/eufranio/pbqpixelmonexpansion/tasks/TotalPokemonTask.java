@@ -1,13 +1,15 @@
 package io.github.eufranio.pbqpixelmonexpansion.tasks;
 
-import com.pixelmonmod.pixelmon.Pixelmon;
-import com.pixelmonmod.pixelmon.storage.PlayerPartyStorage;
+import io.github.eufranio.pbqpixelmonexpansion.PBQPixelmonExpansion;
 import ninja.leaping.configurate.objectmapping.Setting;
 import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
 import online.pixelbuilt.pbquests.quest.Quest;
 import online.pixelbuilt.pbquests.quest.QuestLine;
+import online.pixelbuilt.pbquests.storage.sql.PlayerData;
 import online.pixelbuilt.pbquests.task.BaseTask;
-import org.spongepowered.api.entity.living.player.Player;
+import online.pixelbuilt.pbquests.task.TaskType;
+import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.format.TextColors;
 
 /**
  * Created by Frani on 28/01/2019.
@@ -16,16 +18,28 @@ import org.spongepowered.api.entity.living.player.Player;
 public class TotalPokemonTask implements BaseTask {
 
     @Setting
-    public int requiredPokemon = 10;
+    public int id = 106;
+
+    @Setting
+    public int count = 10;
 
     @Override
-    public boolean check(Player player, Quest quest, QuestLine line, int questId) {
-        PlayerPartyStorage storage = Pixelmon.storageManager.getParty(player.getUniqueId());
-        return storage.pokedex.countCaught() >= requiredPokemon;
+    public Text getDisplay() {
+        return Text.of(TextColors.GREEN, "Have caught at least ", TextColors.AQUA, count, " Pokemon");
     }
 
     @Override
-    public void complete(Player player, Quest quest, QuestLine line, int questId) {
-        //
+    public TaskType getType() {
+        return PBQPixelmonExpansion.TOTAL_POKEMON;
+    }
+
+    @Override
+    public int getId() {
+        return id;
+    }
+
+    @Override
+    public boolean isCompleted(PlayerData data, QuestLine line, Quest quest) {
+        return PBQPixelmonExpansion.getInstance().getBridge().hasCaught(data.getUser(), null, count);
     }
 }

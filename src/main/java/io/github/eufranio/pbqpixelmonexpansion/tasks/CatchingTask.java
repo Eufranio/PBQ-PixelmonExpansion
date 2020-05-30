@@ -1,50 +1,68 @@
 package io.github.eufranio.pbqpixelmonexpansion.tasks;
 
-import com.google.common.collect.Maps;
-import com.pixelmonmod.pixelmon.enums.EnumSpecies;
+import io.github.eufranio.pbqpixelmonexpansion.PBQPixelmonExpansion;
+import io.github.eufranio.pbqpixelmonexpansion.events.Event;
 import ninja.leaping.configurate.objectmapping.Setting;
 import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
+import online.pixelbuilt.pbquests.PixelBuiltQuests;
 import online.pixelbuilt.pbquests.quest.Quest;
 import online.pixelbuilt.pbquests.quest.QuestLine;
-import online.pixelbuilt.pbquests.task.BaseTask;
-import org.spongepowered.api.entity.living.player.Player;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import online.pixelbuilt.pbquests.storage.sql.PlayerData;
+import online.pixelbuilt.pbquests.storage.sql.QuestStatus;
+import online.pixelbuilt.pbquests.task.TaskType;
+import online.pixelbuilt.pbquests.task.TriggeredTask;
+import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.format.TextColors;
 
 /**
  * Created by Frani on 28/01/2019.
  */
 @ConfigSerializable
-public class CatchingTask implements BaseTask<CatchingTask> {
+public class CatchingTask implements TriggeredTask<Event.Catching> {
 
     @Setting
-    public String pokemonName = "Pikachu";
+    public int id = 100;
 
     @Setting
-    public int count = 3;
+    public String pokemonSpec = "Pikachu lvl:5";
 
-    @Setting(comment = "checking mode. 1 = any pokemon, 2 = exact pokemon")
-    public int mode = 1;
+    @Setting
+    public int amount = 1;
 
-    public static Map<UUID, Map<EnumSpecies, Integer>> caught = Maps.newHashMap();
+    @Setting(comment = "Checking mode: \"any\" poke or a \"specific\" poke")
+    public String mode = "any";
 
     @Override
-    public boolean check(Player player, Quest quest, QuestLine line, int questId) {
-        EnumSpecies poke = EnumSpecies.getFromNameAnyCase(this.pokemonName);
-
-        if (mode == 1) {
-            return caught.getOrDefault(player.getUniqueId(), new HashMap<>()).values().stream().mapToInt(i -> i).sum() >= count;
-        } else if (mode == 2) {
-            return caught.getOrDefault(player.getUniqueId(), new HashMap<>()).getOrDefault(poke, 0) >= count;
-        }
-
-        return false;
+    public Class<Event.Catching> getEventClass() {
+        return Event.Catching.class;
     }
 
     @Override
-    public void complete(Player player, Quest quest, QuestLine line, int questId) {
+    public void handle(QuestLine line, Quest quest, Event.Catching event) {
+        if (mode.toLowerCase().equals("any") || event.matches(pokemonSpec)) {
+            PlayerData data = PixelBuiltQuests.getStorage().getData(event.getTargetEntity().getUniqueId());
+            QuestStatus status = data.getStatus(this, line, quest);
+            this.increase(data, status, 1);
+        }
+    }
 
+    @Override
+    public int getTotal() {
+        return this.amount;
+    }
+
+    @Override
+    public Text getDisplay() {
+        return Text.of(TextColors.GREEN, "Catch ", TextColors.AQUA, amount, mode.toLowerCase().equals("any") ? " Pokemon" : pokemonSpec);
+    }
+
+    @Override
+    public TaskType getType() {
+        return PBQPixelmonExpansion.CATCHING;
+    }
+
+    @Override
+    public int getId() {
+        return id;
     }
 }

@@ -1,32 +1,45 @@
 package io.github.eufranio.pbqpixelmonexpansion.tasks;
 
-import com.pixelmonmod.pixelmon.Pixelmon;
-import com.pixelmonmod.pixelmon.pokedex.Pokedex;
-import com.pixelmonmod.pixelmon.storage.PlayerPartyStorage;
+import io.github.eufranio.pbqpixelmonexpansion.PBQPixelmonExpansion;
 import ninja.leaping.configurate.objectmapping.Setting;
 import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
 import online.pixelbuilt.pbquests.quest.Quest;
 import online.pixelbuilt.pbquests.quest.QuestLine;
+import online.pixelbuilt.pbquests.storage.sql.PlayerData;
 import online.pixelbuilt.pbquests.task.BaseTask;
-import org.spongepowered.api.entity.living.player.Player;
+import online.pixelbuilt.pbquests.task.TaskType;
+import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.format.TextColors;
 
 /**
  * Created by Frani on 28/01/2019.
  */
 @ConfigSerializable
-public class HasSeenTask implements BaseTask<HasSeenTask> {
+public class HasSeenTask implements BaseTask {
 
     @Setting
-    public String pokemon = "Pikachu";
+    public int id = 104;
+
+    @Setting
+    public String species = "Pikachu";
 
     @Override
-    public boolean check(Player player, Quest quest, QuestLine line, int questId) {
-        PlayerPartyStorage storage = Pixelmon.storageManager.getParty(player.getUniqueId());
-        return storage.pokedex.hasSeen(Pokedex.nameToID(pokemon));
+    public Text getDisplay() {
+        return Text.of(TextColors.GREEN, "Have seen a ", TextColors.AQUA, species);
     }
 
     @Override
-    public void complete(Player player, Quest quest, QuestLine line, int questId) {
-        //
+    public TaskType getType() {
+        return PBQPixelmonExpansion.HAS_SEEN;
+    }
+
+    @Override
+    public int getId() {
+        return id;
+    }
+
+    @Override
+    public boolean isCompleted(PlayerData data, QuestLine line, Quest quest) {
+        return PBQPixelmonExpansion.getInstance().getBridge().hasSeen(data.getUser(), species);
     }
 }

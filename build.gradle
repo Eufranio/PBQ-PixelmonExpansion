@@ -11,31 +11,33 @@ buildscript {
     }
 }
 
-
 plugins {
     id 'org.spongepowered.plugin' version '0.9.0'
 }
 
-apply plugin: 'net.minecraftforge.gradle.forge'
+allprojects {
+    apply plugin: 'net.minecraftforge.gradle.forge'
+    apply plugin: 'org.spongepowered.plugin'
+    apply plugin: 'java'
+
+    dependencies {
+        compileOnly 'org.spongepowered:spongeapi:7.3.0-SNAPSHOT'
+        compileOnly 'com.github.Eufranio:PixelBuilt-Quests:api7-SNAPSHOT'
+    }
+
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
+
+    minecraft {
+        // TODO: Configure Forge build here
+        forgeVersion = '1.12.2-14.23.5.2847'
+        // TODO: Replace with your mappings version, e.g. stable_39 or snapshot_20180814
+        mappings = 'stable_39'
+    }
+}
 
 group = pluginGroup
 version = pluginVersion
-
-dependencies {
-    compile 'org.spongepowered:spongeapi:7.1.0-SNAPSHOT'
-    compile files('Pixelmon-1.12.2-7.0.6-server-deobf.jar')
-    implementation 'com.github.Eufranio:PixelBuilt-Quests:api7-SNAPSHOT'
-}
-
-repositories {
-    maven { url 'https://jitpack.io' }
-}
-
-minecraft {
-    // TODO: Configure Forge build here
-    forgeVersion = '1.12.2-14.23.5.2847'
-    // TODO: Replace with your mappings version, e.g. stable_39 or snapshot_20180814
-    mappings = 'stable_39'
-}
 
 sponge.plugin.id = pluginId
