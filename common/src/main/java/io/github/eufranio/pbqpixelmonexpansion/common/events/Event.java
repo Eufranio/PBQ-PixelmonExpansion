@@ -57,10 +57,16 @@ public class Event extends AbstractEvent implements TargetPlayerEvent {
     public static class DefeatTrainer extends Event {
 
         int level;
+        String npc;
 
-        public DefeatTrainer(Player player, int level) {
+        public DefeatTrainer(Player player, int level, String npc) {
             super(player);
             this.level = level;
+            this.npc = npc;
+        }
+
+        public String getNpc() {
+            return npc;
         }
 
         public int getLevel() {

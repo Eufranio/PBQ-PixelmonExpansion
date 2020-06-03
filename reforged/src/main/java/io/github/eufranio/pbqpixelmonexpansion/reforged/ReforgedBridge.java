@@ -73,7 +73,7 @@ public class ReforgedBridge implements PixelmonBridge {
 
     @SubscribeEvent
     public void onBeatTrainer(BeatTrainerEvent event) {
-        Event.DefeatTrainer triggerEvent = new Event.DefeatTrainer((Player) event.player, event.trainer.level);
+        Event.DefeatTrainer triggerEvent = new Event.DefeatTrainer((Player) event.player, event.trainer.level, event.trainer.getName());
         Sponge.getEventManager().post(triggerEvent);
     }
 

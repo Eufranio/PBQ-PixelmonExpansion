@@ -81,7 +81,8 @@ public class GenerationsBridge implements PixelmonBridge {
     public void onBeatTrainer(BeatTrainerEvent event) {
         Event.DefeatTrainer triggerEvent = new Event.DefeatTrainer(
                 (Player) event.player,
-                event.trainer.writeToNBT(new NBTTagCompound()).getInteger(NbtKeys.NPCLEVEL)
+                event.trainer.writeToNBT(new NBTTagCompound()).getInteger(NbtKeys.NPCLEVEL),
+                event.trainer.getName()
         );
         Sponge.getEventManager().post(triggerEvent);
     }

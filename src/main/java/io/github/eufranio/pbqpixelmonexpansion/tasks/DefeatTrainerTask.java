@@ -23,6 +23,9 @@ public class DefeatTrainerTask implements TriggeredTask<Event.DefeatTrainer> {
     @Setting
     public int id = 102;
 
+    @Setting(comment = "If not empty, check if the trainer name is \"name\"")
+    public String name = "Default";
+
     @Setting(comment = "Checking mode: \"any\" trainer or trainers with a least \"level\" level")
     public String mode = "any";
 
@@ -39,6 +42,8 @@ public class DefeatTrainerTask implements TriggeredTask<Event.DefeatTrainer> {
 
     @Override
     public void handle(QuestLine line, Quest quest, Event.DefeatTrainer event) {
+        if (!name.isEmpty() && !event.getNpc().equals(name))
+            return;
         if (mode.toLowerCase().equals("any") || event.getLevel() >= level) {
             PlayerData data = PixelBuiltQuests.getStorage().getData(event.getTargetEntity().getUniqueId());
             QuestStatus status = data.getStatus(this, line, quest);
