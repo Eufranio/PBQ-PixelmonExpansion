@@ -1,22 +1,24 @@
 package io.github.eufranio.pbqpixelmonexpansion.generations;
 
-import com.pixelmonmod.pixelmon.Pixelmon;
-import com.pixelmonmod.pixelmon.api.events.BeatTrainerEvent;
-import com.pixelmonmod.pixelmon.api.events.CaptureEvent;
-import com.pixelmonmod.pixelmon.api.events.NPCChatEvent;
-import com.pixelmonmod.pixelmon.api.pokemon.PokemonSpec;
-import com.pixelmonmod.pixelmon.pokedex.Pokedex;
-import com.pixelmonmod.pixelmon.storage.NbtKeys;
-import com.pixelmonmod.pixelmon.storage.PixelmonStorage;
-import com.pixelmonmod.pixelmon.storage.PlayerStorage;
+import com.pixelmongenerations.api.events.CaptureEvent;
+import com.pixelmongenerations.api.events.npc.BeatTrainerEvent;
+import com.pixelmongenerations.api.events.npc.NPCChatEvent;
+import com.pixelmongenerations.api.pokemon.PokemonSpec;
+import com.pixelmongenerations.common.pokedex.Pokedex;
+import com.pixelmongenerations.core.storage.NbtKeys;
+import com.pixelmongenerations.core.storage.PixelmonStorage;
+import com.pixelmongenerations.core.storage.PlayerStorage;
 import io.github.eufranio.pbqpixelmonexpansion.common.CheckMode;
 import io.github.eufranio.pbqpixelmonexpansion.common.PixelmonBridge;
 import io.github.eufranio.pbqpixelmonexpansion.common.events.Event;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.User;
+import org.spongepowered.api.text.Text;
 
 import javax.annotation.Nullable;
 import java.util.stream.Stream;
@@ -24,9 +26,7 @@ import java.util.stream.Stream;
 public class GenerationsBridge implements PixelmonBridge {
 
     @Override
-    public void init() {
-        Pixelmon.EVENT_BUS.register(this);
-    }
+    public void init() {}
 
     @Override
     public boolean hasCaught(User user, @Nullable String species, int amount) {
@@ -66,23 +66,25 @@ public class GenerationsBridge implements PixelmonBridge {
     }
 
     @SubscribeEvent
-    public void onCatch(CaptureEvent.SuccessfulCapture event) {
-        Event.Catching triggerEvent = new Event.Catching((Player) event.player, spec -> new PokemonSpec(spec).matches(event.getPokemon()));
+    public void onCatch(CaptureEvent.SuccessfulCaptureEvent event) {
+        Event.Catching triggerEvent = new Event.Catching((Player) event.getPlayer(), spec -> new PokemonSpec(spec).matches(event.getPokemon()));
         Sponge.getEventManager().post(triggerEvent);
     }
 
     @SubscribeEvent
     public void onChat(NPCChatEvent event) {
-        Event.Chatting triggerEvent = new Event.Chatting((Player) event.player, event.npc.getName());
+        Entity entity = (Entity) event.npc;
+        Event.Chatting triggerEvent = new Event.Chatting((Player) event.player, entity.get(Keys.DISPLAY_NAME).orElse(Text.of(entity.getType().getTranslation())).toPlain().trim());
         Sponge.getEventManager().post(triggerEvent);
     }
 
     @SubscribeEvent
     public void onBeatTrainer(BeatTrainerEvent event) {
+        Entity entity = (Entity) event.getTrainer();
         Event.DefeatTrainer triggerEvent = new Event.DefeatTrainer(
-                (Player) event.player,
-                event.trainer.writeToNBT(new NBTTagCompound()).getInteger(NbtKeys.NPCLEVEL),
-                event.trainer.getName()
+                (Player) event.getPlayer(),
+                event.getTrainer().writeToNBT(new NBTTagCompound()).getInteger(NbtKeys.NPCLEVEL),
+                entity.get(Keys.DISPLAY_NAME).orElse(Text.of(entity.getType().getTranslation())).toPlain().trim()
         );
         Sponge.getEventManager().post(triggerEvent);
     }

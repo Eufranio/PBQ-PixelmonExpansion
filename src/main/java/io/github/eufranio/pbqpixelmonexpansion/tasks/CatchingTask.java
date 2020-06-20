@@ -41,8 +41,10 @@ public class CatchingTask implements TriggeredTask<Event.Catching> {
     public void handle(QuestLine line, Quest quest, Event.Catching event) {
         if (mode.toLowerCase().equals("any") || event.matches(pokemonSpec)) {
             PlayerData data = PixelBuiltQuests.getStorage().getData(event.getTargetEntity().getUniqueId());
-            QuestStatus status = data.getStatus(this, line, quest);
-            this.increase(data, status, 1);
+            if (!this.isCompleted(data, line, quest)) {
+                QuestStatus status = data.getStatus(this, line, quest);
+                this.increase(data, status, 1);
+            }
         }
     }
 

@@ -54,6 +54,8 @@ public class PBQPixelmonExpansion {
                 logger.error("PBQ Pixelmon Expansion could not load the Pixelmon bridge!");
             }
         }
+
+        bridge.init();
     }
 
     @Listener

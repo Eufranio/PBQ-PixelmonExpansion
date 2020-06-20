@@ -43,7 +43,7 @@ public class PokemonLevelTask implements BaseTask {
     @Override
     public Text getDisplay() {
         return Text.of(TextColors.GREEN, "Have ", TextColors.AQUA,
-                pokemonAmountMode == CheckMode.MIN ? "at least " : "max. ", pokemonAmount, " ",
+                pokemonAmountMode == CheckMode.MIN ? "at least " : ( pokemonAmountMode == CheckMode.EXACT ? "exactly " : "max. "), pokemonAmount, " ",
                 levelMode == CheckMode.MIN ? "min lvl. " : levelMode == CheckMode.MAX ? "max lvl. " : "lvl. ", level, " ",
                 speciesMode == CheckMode.EXACT ? species : "Pokemon"
                 );

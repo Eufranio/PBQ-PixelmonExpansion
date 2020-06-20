@@ -12,8 +12,11 @@ import io.github.eufranio.pbqpixelmonexpansion.common.PixelmonBridge;
 import io.github.eufranio.pbqpixelmonexpansion.common.events.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.User;
+import org.spongepowered.api.text.Text;
 
 import javax.annotation.Nullable;
 
@@ -67,13 +70,15 @@ public class ReforgedBridge implements PixelmonBridge {
 
     @SubscribeEvent
     public void onChat(NPCChatEvent event) {
-        Event.Chatting triggerEvent = new Event.Chatting((Player) event.player, event.npc.getName());
+        Entity entity = (Entity) event.npc;
+        Event.Chatting triggerEvent = new Event.Chatting((Player) event.player, entity.get(Keys.DISPLAY_NAME).orElse(Text.of(entity.getType().getTranslation())).toPlain().trim());
         Sponge.getEventManager().post(triggerEvent);
     }
 
     @SubscribeEvent
     public void onBeatTrainer(BeatTrainerEvent event) {
-        Event.DefeatTrainer triggerEvent = new Event.DefeatTrainer((Player) event.player, event.trainer.level, event.trainer.getName());
+        Entity entity = (Entity) event.trainer;
+        Event.DefeatTrainer triggerEvent = new Event.DefeatTrainer((Player) event.player, event.trainer.level, entity.get(Keys.DISPLAY_NAME).orElse(Text.of(entity.getType().getTranslation())).toPlain().trim());
         Sponge.getEventManager().post(triggerEvent);
     }
 
