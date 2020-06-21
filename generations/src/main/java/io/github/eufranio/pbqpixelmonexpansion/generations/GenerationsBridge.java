@@ -12,13 +12,11 @@ import io.github.eufranio.pbqpixelmonexpansion.common.CheckMode;
 import io.github.eufranio.pbqpixelmonexpansion.common.PixelmonBridge;
 import io.github.eufranio.pbqpixelmonexpansion.common.events.Event;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.data.key.Keys;
-import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.User;
-import org.spongepowered.api.text.Text;
 
 import javax.annotation.Nullable;
 import java.util.stream.Stream;
@@ -26,7 +24,9 @@ import java.util.stream.Stream;
 public class GenerationsBridge implements PixelmonBridge {
 
     @Override
-    public void init() {}
+    public void init() {
+        MinecraftForge.EVENT_BUS.register(this);
+    }
 
     @Override
     public boolean hasCaught(User user, @Nullable String species, int amount) {
@@ -73,18 +73,16 @@ public class GenerationsBridge implements PixelmonBridge {
 
     @SubscribeEvent
     public void onChat(NPCChatEvent event) {
-        Entity entity = (Entity) event.npc;
-        Event.Chatting triggerEvent = new Event.Chatting((Player) event.player, entity.get(Keys.DISPLAY_NAME).orElse(Text.of(entity.getType().getTranslation())).toPlain().trim());
+        Event.Chatting triggerEvent = new Event.Chatting((Player) event.player, event.npc.getName("en/us"));
         Sponge.getEventManager().post(triggerEvent);
     }
 
     @SubscribeEvent
     public void onBeatTrainer(BeatTrainerEvent event) {
-        Entity entity = (Entity) event.getTrainer();
         Event.DefeatTrainer triggerEvent = new Event.DefeatTrainer(
                 (Player) event.getPlayer(),
                 event.getTrainer().writeToNBT(new NBTTagCompound()).getInteger(NbtKeys.NPCLEVEL),
-                entity.get(Keys.DISPLAY_NAME).orElse(Text.of(entity.getType().getTranslation())).toPlain().trim()
+                event.getTrainer().getName("en/us")
         );
         Sponge.getEventManager().post(triggerEvent);
     }
