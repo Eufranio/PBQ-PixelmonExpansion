@@ -1,9 +1,11 @@
 package io.github.eufranio.pbqpixelmonexpansion.generations;
 
 import com.pixelmongenerations.api.events.CaptureEvent;
+import com.pixelmongenerations.api.events.FishingEvent;
 import com.pixelmongenerations.api.events.npc.BeatTrainerEvent;
 import com.pixelmongenerations.api.events.npc.NPCChatEvent;
 import com.pixelmongenerations.api.pokemon.PokemonSpec;
+import com.pixelmongenerations.common.entity.pixelmon.EntityPixelmon;
 import com.pixelmongenerations.common.pokedex.Pokedex;
 import com.pixelmongenerations.core.storage.NbtKeys;
 import com.pixelmongenerations.core.storage.PixelmonStorage;
@@ -85,6 +87,14 @@ public class GenerationsBridge implements PixelmonBridge {
                 event.getTrainer().getName("en/us")
         );
         Sponge.getEventManager().post(triggerEvent);
+    }
+
+    @SubscribeEvent
+    public void onFish(FishingEvent.FishingReelEvent event) {
+        if (event.isPokemon()) {
+            Event.PokemonFishing triggerEvent = new Event.PokemonFishing((Player) event.getPlayer(), spec -> new PokemonSpec(spec).matches((EntityPixelmon) event.getEntity().get()));
+            Sponge.getEventManager().post(triggerEvent);
+        }
     }
 
     PlayerStorage getStorage(User user) {

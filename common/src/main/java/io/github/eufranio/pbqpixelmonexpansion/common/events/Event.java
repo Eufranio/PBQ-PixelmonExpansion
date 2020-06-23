@@ -74,4 +74,18 @@ public class Event extends AbstractEvent implements TargetPlayerEvent {
         }
     }
 
+    public static class PokemonFishing extends Event {
+
+        Predicate<String> pokemonSpecMatcher;
+
+        public PokemonFishing(Player player, Predicate<String> pokemonSpecMatcher) {
+            super(player);
+            this.pokemonSpecMatcher = pokemonSpecMatcher;
+        }
+
+        public boolean matches(String pokemonSpec) {
+            return this.pokemonSpecMatcher.test(pokemonSpec);
+        }
+    }
+
 }

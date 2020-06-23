@@ -46,6 +46,11 @@ dependencies {
 shadowJar {
     configurations = [project.configurations.shadow]
     classifier = null
+
+    dependsOn reobfJar
+    dependsOn project(':generations').tasks.reobfJar
+    dependsOn project(':reforged').tasks.reobfJar
+
     from sourceSets.main.output
 }
 

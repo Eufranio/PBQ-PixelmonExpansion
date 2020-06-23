@@ -38,6 +38,7 @@ public class PBQPixelmonExpansion {
     public static TaskType HAS_SEEN = new TaskType("has_seen", "Has seen pokemon", HasSeenTask.class);
     public static TaskType POKEMON_LEVEL = new TaskType("pokemon_level", "Pokemon Level", PokemonLevelTask.class);
     public static TaskType TOTAL_POKEMON = new TaskType("total_pokemon", "Total Pokemon", TotalPokemonTask.class);
+    public static TaskType POKEMON_FISHING = new TaskType("pokemon_fishing", "Pokemon Fishing", PokemonFishingTask.class);
 
     @Listener
     public void onServerStart(GameStartedServerEvent event) {
@@ -68,6 +69,7 @@ public class PBQPixelmonExpansion {
         event.register(HAS_SEEN);
         event.register(POKEMON_LEVEL);
         event.register(TOTAL_POKEMON);
+        event.register(POKEMON_FISHING);
     }
 
     public PixelmonBridge getBridge() {

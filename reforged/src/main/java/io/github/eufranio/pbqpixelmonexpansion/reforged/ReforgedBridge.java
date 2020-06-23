@@ -3,8 +3,10 @@ package io.github.eufranio.pbqpixelmonexpansion.reforged;
 import com.pixelmonmod.pixelmon.Pixelmon;
 import com.pixelmonmod.pixelmon.api.events.BeatTrainerEvent;
 import com.pixelmonmod.pixelmon.api.events.CaptureEvent;
+import com.pixelmonmod.pixelmon.api.events.FishingEvent;
 import com.pixelmonmod.pixelmon.api.events.NPCChatEvent;
 import com.pixelmonmod.pixelmon.api.pokemon.PokemonSpec;
+import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
 import com.pixelmonmod.pixelmon.pokedex.Pokedex;
 import com.pixelmonmod.pixelmon.storage.PlayerPartyStorage;
 import io.github.eufranio.pbqpixelmonexpansion.common.CheckMode;
@@ -80,6 +82,14 @@ public class ReforgedBridge implements PixelmonBridge {
         Entity entity = (Entity) event.trainer;
         Event.DefeatTrainer triggerEvent = new Event.DefeatTrainer((Player) event.player, event.trainer.level, entity.get(Keys.DISPLAY_NAME).orElse(Text.of(entity.getType().getTranslation())).toPlain().trim());
         Sponge.getEventManager().post(triggerEvent);
+    }
+
+    @SubscribeEvent
+    public void onFish(FishingEvent.Reel event) {
+        if (event.isPokemon()) {
+            Event.PokemonFishing triggerEvent = new Event.PokemonFishing((Player) event.player, spec -> new PokemonSpec(spec).matches((EntityPixelmon) event.optEntity.get()));
+            Sponge.getEventManager().post(triggerEvent);
+        }
     }
 
     PlayerPartyStorage getStorage(User user) {
