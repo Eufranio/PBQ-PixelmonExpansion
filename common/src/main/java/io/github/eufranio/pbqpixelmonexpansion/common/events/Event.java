@@ -6,6 +6,7 @@ import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.event.entity.living.humanoid.player.TargetPlayerEvent;
 import org.spongepowered.api.event.impl.AbstractEvent;
 
+import java.util.UUID;
 import java.util.function.Predicate;
 
 public class Event extends AbstractEvent implements TargetPlayerEvent {

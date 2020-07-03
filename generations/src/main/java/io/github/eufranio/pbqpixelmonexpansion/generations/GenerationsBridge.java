@@ -1,5 +1,6 @@
 package io.github.eufranio.pbqpixelmonexpansion.generations;
 
+import com.pixelmongenerations.api.events.BreedEvent;
 import com.pixelmongenerations.api.events.CaptureEvent;
 import com.pixelmongenerations.api.events.FishingEvent;
 import com.pixelmongenerations.api.events.npc.BeatTrainerEvent;
@@ -12,6 +13,7 @@ import com.pixelmongenerations.core.storage.PixelmonStorage;
 import com.pixelmongenerations.core.storage.PlayerStorage;
 import io.github.eufranio.pbqpixelmonexpansion.common.CheckMode;
 import io.github.eufranio.pbqpixelmonexpansion.common.PixelmonBridge;
+import io.github.eufranio.pbqpixelmonexpansion.common.events.BreedingEvent;
 import io.github.eufranio.pbqpixelmonexpansion.common.events.Event;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.MinecraftForge;
@@ -95,6 +97,16 @@ public class GenerationsBridge implements PixelmonBridge {
             Event.PokemonFishing triggerEvent = new Event.PokemonFishing((Player) event.getPlayer(), spec -> new PokemonSpec(spec).matches((EntityPixelmon) event.getEntity().get()));
             Sponge.getEventManager().post(triggerEvent);
         }
+    }
+
+    @SubscribeEvent
+    public void onBreed(BreedEvent.MakeEggEvent event) {
+        BreedingEvent triggerEvent = new BreedingEvent(event.getOwner(),
+                spec -> new PokemonSpec(spec).matches(event.getParentOne()),
+                spec -> new PokemonSpec(spec).matches(event.getParentTwo()),
+                spec -> new PokemonSpec(spec).matches(event.getEgg())
+        );
+        Sponge.getEventManager().post(triggerEvent);
     }
 
     PlayerStorage getStorage(User user) {

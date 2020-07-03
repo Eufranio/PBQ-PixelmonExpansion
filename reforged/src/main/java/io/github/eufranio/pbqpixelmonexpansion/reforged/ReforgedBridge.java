@@ -1,16 +1,14 @@
 package io.github.eufranio.pbqpixelmonexpansion.reforged;
 
 import com.pixelmonmod.pixelmon.Pixelmon;
-import com.pixelmonmod.pixelmon.api.events.BeatTrainerEvent;
-import com.pixelmonmod.pixelmon.api.events.CaptureEvent;
-import com.pixelmonmod.pixelmon.api.events.FishingEvent;
-import com.pixelmonmod.pixelmon.api.events.NPCChatEvent;
+import com.pixelmonmod.pixelmon.api.events.*;
 import com.pixelmonmod.pixelmon.api.pokemon.PokemonSpec;
 import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
 import com.pixelmonmod.pixelmon.pokedex.Pokedex;
 import com.pixelmonmod.pixelmon.storage.PlayerPartyStorage;
 import io.github.eufranio.pbqpixelmonexpansion.common.CheckMode;
 import io.github.eufranio.pbqpixelmonexpansion.common.PixelmonBridge;
+import io.github.eufranio.pbqpixelmonexpansion.common.events.BreedingEvent;
 import io.github.eufranio.pbqpixelmonexpansion.common.events.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.spongepowered.api.Sponge;
@@ -90,6 +88,16 @@ public class ReforgedBridge implements PixelmonBridge {
             Event.PokemonFishing triggerEvent = new Event.PokemonFishing((Player) event.player, spec -> new PokemonSpec(spec).matches((EntityPixelmon) event.optEntity.get()));
             Sponge.getEventManager().post(triggerEvent);
         }
+    }
+
+    @SubscribeEvent
+    public void onBreed(BreedEvent.MakeEgg event) {
+        BreedingEvent triggerEvent = new BreedingEvent(event.owner,
+                spec -> new PokemonSpec(spec).matches(event.parent1),
+                spec -> new PokemonSpec(spec).matches(event.parent2),
+                spec -> new PokemonSpec(spec).matches(event.getEgg())
+        );
+        Sponge.getEventManager().post(triggerEvent);
     }
 
     PlayerPartyStorage getStorage(User user) {

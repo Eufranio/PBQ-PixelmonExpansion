@@ -31,7 +31,8 @@ public class PBQPixelmonExpansion {
     PixelmonBridge bridge;
     static PBQPixelmonExpansion instance;
 
-    public static TaskType CATCHING = new TaskType("catching", "Catching Pokemons", CatchingTask.class);
+    public static TaskType BREEDING = new TaskType("breeding", "Breeding Pokemon", BreedingTask.class);
+    public static TaskType CATCHING = new TaskType("catching", "Catching Pokemon", CatchingTask.class);
     public static TaskType CHATTING = new TaskType("chatting", "Chatting to NPCs", ChattingTask.class);
     public static TaskType DEFEAT_TRAINER = new TaskType("defeat_trainer", "Defeating Trainers", DefeatTrainerTask.class);
     public static TaskType HAS_CAUGHT = new TaskType("has_caught", "Has caught pokemon", HasCaughtTask.class);
@@ -70,6 +71,7 @@ public class PBQPixelmonExpansion {
         event.register(POKEMON_LEVEL);
         event.register(TOTAL_POKEMON);
         event.register(POKEMON_FISHING);
+        event.register(BREEDING);
     }
 
     public PixelmonBridge getBridge() {
