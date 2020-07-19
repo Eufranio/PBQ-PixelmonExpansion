@@ -24,7 +24,7 @@ public class TotalPokemonTask implements BaseTask {
     public int count = 10;
 
     @Override
-    public Text getDisplay() {
+    public Text toText() {
         return Text.of(TextColors.GREEN, "Have caught at least ", TextColors.AQUA, count, " Pokemon");
     }
 

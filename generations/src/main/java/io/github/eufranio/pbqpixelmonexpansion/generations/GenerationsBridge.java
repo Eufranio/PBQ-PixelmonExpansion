@@ -1,11 +1,13 @@
 package io.github.eufranio.pbqpixelmonexpansion.generations;
 
+import com.pixelmongenerations.api.events.BeatWildPixelmonEvent;
 import com.pixelmongenerations.api.events.BreedEvent;
 import com.pixelmongenerations.api.events.CaptureEvent;
 import com.pixelmongenerations.api.events.FishingEvent;
 import com.pixelmongenerations.api.events.npc.BeatTrainerEvent;
 import com.pixelmongenerations.api.events.npc.NPCChatEvent;
 import com.pixelmongenerations.api.pokemon.PokemonSpec;
+import com.pixelmongenerations.common.battle.controller.participants.PixelmonWrapper;
 import com.pixelmongenerations.common.entity.pixelmon.EntityPixelmon;
 import com.pixelmongenerations.common.pokedex.Pokedex;
 import com.pixelmongenerations.core.storage.NbtKeys;
@@ -107,6 +109,15 @@ public class GenerationsBridge implements PixelmonBridge {
                 spec -> new PokemonSpec(spec).matches(event.getEgg())
         );
         Sponge.getEventManager().post(triggerEvent);
+    }
+
+    @SubscribeEvent
+    public void onBeatWildPokemon(BeatWildPixelmonEvent event) {
+        PixelmonWrapper wrapper = event.getWildPokemon().getPokemon();
+        if (wrapper != null && wrapper.pokemon != null) {
+            Event.DefeatWildPokemon triggerEvent = new Event.DefeatWildPokemon((Player) event.getPlayer(), spec -> new PokemonSpec(spec).matches(wrapper.pokemon));
+            Sponge.getEventManager().post(triggerEvent);
+        }
     }
 
     PlayerStorage getStorage(User user) {

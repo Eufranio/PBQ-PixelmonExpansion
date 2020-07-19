@@ -54,7 +54,7 @@ public class CatchingTask implements TriggeredTask<Event.Catching> {
     }
 
     @Override
-    public Text getDisplay() {
+    public Text toText() {
         return Text.of(TextColors.GREEN, "Catch ", TextColors.AQUA, amount, mode.toLowerCase().equals("any") ? " Pokemon" : pokemonSpec);
     }
 

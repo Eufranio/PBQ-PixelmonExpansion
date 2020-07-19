@@ -15,29 +15,32 @@ import online.pixelbuilt.pbquests.task.TriggeredTask;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
+/**
+ * Created by Frani on 18/07/2020.
+ */
 @ConfigSerializable
-public class PokemonFishingTask implements TriggeredTask<Event.PokemonFishing> {
+public class DefeatWildPokemonTask implements TriggeredTask<Event.DefeatWildPokemon> {
 
     @Setting
-    public int id = 107;
-
-    @Setting
-    public int amount = 1;
+    public int id = 108;
 
     @Setting
     public String pokemonSpec = "Pikachu lvl:5";
 
-    @Setting(comment = "Pokemon check mode: \"any\" poke or an \"exact\" poke (that mets the pokemon spec)")
+    @Setting
+    public int amount = 1;
+
+    @Setting(comment = "Checking mode: \"any\" poke or a \"exact\" poke (checks this PokemonSpec)")
     public CheckMode mode = CheckMode.ANY;
 
     @Override
-    public Class<Event.PokemonFishing> getEventClass() {
-        return Event.PokemonFishing.class;
+    public Class<Event.DefeatWildPokemon> getEventClass() {
+        return Event.DefeatWildPokemon.class;
     }
 
     @Override
-    public void handle(QuestLine line, Quest quest, Event.PokemonFishing event) {
-        if (mode == CheckMode.ANY || event.matches(this.pokemonSpec)) {
+    public void handle(QuestLine line, Quest quest, Event.DefeatWildPokemon event) {
+        if (mode == CheckMode.ANY || event.matches(pokemonSpec)) {
             PlayerData data = PixelBuiltQuests.getStorage().getData(event.getTargetEntity().getUniqueId());
             if (!this.isCompleted(data, line, quest)) {
                 QuestStatus status = data.getStatus(this, line, quest);
@@ -53,12 +56,12 @@ public class PokemonFishingTask implements TriggeredTask<Event.PokemonFishing> {
 
     @Override
     public Text toText() {
-        return Text.of(TextColors.GREEN, "Fish ", TextColors.AQUA, amount, " ", mode == CheckMode.ANY ? "Pokemon" : pokemonSpec);
+        return Text.of(TextColors.GREEN, "Beat ", TextColors.AQUA, amount, " Wild ", mode == CheckMode.ANY ? "Pokemon" : pokemonSpec);
     }
 
     @Override
     public TaskType getType() {
-        return PBQPixelmonExpansion.POKEMON_FISHING;
+        return PBQPixelmonExpansion.DEFEAT_WILD_POKE;
     }
 
     @Override

@@ -3,6 +3,7 @@ package io.github.eufranio.pbqpixelmonexpansion.reforged;
 import com.pixelmonmod.pixelmon.Pixelmon;
 import com.pixelmonmod.pixelmon.api.events.*;
 import com.pixelmonmod.pixelmon.api.pokemon.PokemonSpec;
+import com.pixelmonmod.pixelmon.battles.controller.participants.PixelmonWrapper;
 import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
 import com.pixelmonmod.pixelmon.pokedex.Pokedex;
 import com.pixelmonmod.pixelmon.storage.PlayerPartyStorage;
@@ -98,6 +99,17 @@ public class ReforgedBridge implements PixelmonBridge {
                 spec -> new PokemonSpec(spec).matches(event.getEgg())
         );
         Sponge.getEventManager().post(triggerEvent);
+    }
+
+    @SubscribeEvent
+    public void onBeatWildPokemon(BeatWildPixelmonEvent event) {
+        if (event.wpp.controlledPokemon.isEmpty())
+            return;
+        PixelmonWrapper wrapper = event.wpp.controlledPokemon.get(0);
+        if (wrapper != null && wrapper.pokemon != null) {
+            Event.DefeatWildPokemon triggerEvent = new Event.DefeatWildPokemon((Player) event.player, spec -> new PokemonSpec(spec).matches(wrapper.pokemon));
+            Sponge.getEventManager().post(triggerEvent);
+        }
     }
 
     PlayerPartyStorage getStorage(User user) {

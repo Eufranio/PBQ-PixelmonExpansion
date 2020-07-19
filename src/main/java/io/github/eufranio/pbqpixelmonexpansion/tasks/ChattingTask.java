@@ -51,7 +51,7 @@ public class ChattingTask implements TriggeredTask<Event.Chatting> {
     }
 
     @Override
-    public Text getDisplay() {
+    public Text toText() {
         return Text.of(TextColors.GREEN, "Talk to ", TextColors.AQUA, mode.toLowerCase().equals("any") ? "an NPC" : npc);
     }
 

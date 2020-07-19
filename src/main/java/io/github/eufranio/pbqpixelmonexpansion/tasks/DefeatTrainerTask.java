@@ -59,7 +59,7 @@ public class DefeatTrainerTask implements TriggeredTask<Event.DefeatTrainer> {
     }
 
     @Override
-    public Text getDisplay() {
+    public Text toText() {
         return Text.of(TextColors.GREEN, "Defeat ", TextColors.AQUA, amount, " ",
                 mode.toLowerCase().equals("any") ? "Trainer(s)" : ("Lvl " + level + "+ Trainer(s)"));
     }

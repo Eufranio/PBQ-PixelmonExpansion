@@ -90,7 +90,7 @@ public class BreedingTask implements TriggeredTask<BreedingEvent> {
     }
 
     @Override
-    public Text getDisplay() {
+    public Text toText() {
         return Text.of(TextColors.GREEN,
                 "Breed ", TextColors.AQUA,
                 amount, " ",

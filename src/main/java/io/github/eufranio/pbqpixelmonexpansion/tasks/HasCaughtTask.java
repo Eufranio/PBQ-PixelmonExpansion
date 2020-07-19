@@ -27,7 +27,7 @@ public class HasCaughtTask implements BaseTask {
     public int count = 1;
 
     @Override
-    public Text getDisplay() {
+    public Text toText() {
         return Text.of(TextColors.GREEN, "Have caught ", TextColors.AQUA, count, " ", species);
     }
 

@@ -24,7 +24,7 @@ public class HasSeenTask implements BaseTask {
     public String species = "Pikachu";
 
     @Override
-    public Text getDisplay() {
+    public Text toText() {
         return Text.of(TextColors.GREEN, "Have seen a ", TextColors.AQUA, species);
     }
 

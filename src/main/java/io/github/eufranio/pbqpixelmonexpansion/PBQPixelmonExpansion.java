@@ -35,6 +35,7 @@ public class PBQPixelmonExpansion {
     public static TaskType CATCHING = new TaskType("catching", "Catching Pokemon", CatchingTask.class);
     public static TaskType CHATTING = new TaskType("chatting", "Chatting to NPCs", ChattingTask.class);
     public static TaskType DEFEAT_TRAINER = new TaskType("defeat_trainer", "Defeating Trainers", DefeatTrainerTask.class);
+    public static TaskType DEFEAT_WILD_POKE = new TaskType("defeat_wild_poke", "Defeat Wild Pokemon", DefeatWildPokemonTask.class);
     public static TaskType HAS_CAUGHT = new TaskType("has_caught", "Has caught pokemon", HasCaughtTask.class);
     public static TaskType HAS_SEEN = new TaskType("has_seen", "Has seen pokemon", HasSeenTask.class);
     public static TaskType POKEMON_LEVEL = new TaskType("pokemon_level", "Pokemon Level", PokemonLevelTask.class);
@@ -66,6 +67,7 @@ public class PBQPixelmonExpansion {
         event.register(CATCHING);
         event.register(CHATTING);
         event.register(DEFEAT_TRAINER);
+        event.register(DEFEAT_WILD_POKE);
         event.register(HAS_CAUGHT);
         event.register(HAS_SEEN);
         event.register(POKEMON_LEVEL);
