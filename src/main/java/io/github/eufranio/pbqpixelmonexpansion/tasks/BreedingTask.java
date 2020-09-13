@@ -9,7 +9,6 @@ import online.pixelbuilt.pbquests.PixelBuiltQuests;
 import online.pixelbuilt.pbquests.quest.Quest;
 import online.pixelbuilt.pbquests.quest.QuestLine;
 import online.pixelbuilt.pbquests.storage.sql.PlayerData;
-import online.pixelbuilt.pbquests.storage.sql.QuestStatus;
 import online.pixelbuilt.pbquests.task.TaskType;
 import online.pixelbuilt.pbquests.task.TriggeredTask;
 import org.spongepowered.api.text.Text;
@@ -79,8 +78,8 @@ public class BreedingTask implements TriggeredTask<BreedingEvent> {
 
         PlayerData data = PixelBuiltQuests.getStorage().getData(event.getPlayer());
         if (!this.isCompleted(data, line, quest)) {
-            QuestStatus status = data.getStatus(this, line, quest);
-            this.increase(data, status, 1);
+            data.getStatus(this, line, quest)
+                    .ifPresent(status -> this.increase(data, status, 1));
         }
     }
 

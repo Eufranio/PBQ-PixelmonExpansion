@@ -43,8 +43,8 @@ public class DefeatWildPokemonTask implements TriggeredTask<Event.DefeatWildPoke
         if (mode == CheckMode.ANY || event.matches(pokemonSpec)) {
             PlayerData data = PixelBuiltQuests.getStorage().getData(event.getTargetEntity().getUniqueId());
             if (!this.isCompleted(data, line, quest)) {
-                QuestStatus status = data.getStatus(this, line, quest);
-                this.increase(data, status, 1);
+                data.getStatus(this, line, quest)
+                        .ifPresent(status -> this.increase(data, status, 1));
             }
         }
     }

@@ -39,8 +39,8 @@ public class ChattingTask implements TriggeredTask<Event.Chatting> {
         if (mode.toLowerCase().equals("any") || event.getNPC().equals(npc)) {
             PlayerData data = PixelBuiltQuests.getStorage().getData(event.getTargetEntity().getUniqueId());
             if (!this.isCompleted(data, line, quest)) {
-                QuestStatus status = data.getStatus(this, line, quest);
-                this.increase(data, status, 1);
+                data.getStatus(this, line, quest)
+                        .ifPresent(status -> this.increase(data, status, 1));
             }
         }
     }

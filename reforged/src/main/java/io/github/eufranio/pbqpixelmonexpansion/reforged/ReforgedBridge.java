@@ -4,6 +4,7 @@ import com.pixelmonmod.pixelmon.Pixelmon;
 import com.pixelmonmod.pixelmon.api.events.*;
 import com.pixelmonmod.pixelmon.api.pokemon.PokemonSpec;
 import com.pixelmonmod.pixelmon.battles.controller.participants.PixelmonWrapper;
+import com.pixelmonmod.pixelmon.entities.npcs.NPCChatting;
 import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
 import com.pixelmonmod.pixelmon.pokedex.Pokedex;
 import com.pixelmonmod.pixelmon.storage.PlayerPartyStorage;
@@ -71,15 +72,13 @@ public class ReforgedBridge implements PixelmonBridge {
 
     @SubscribeEvent
     public void onChat(NPCChatEvent event) {
-        Entity entity = (Entity) event.npc;
-        Event.Chatting triggerEvent = new Event.Chatting((Player) event.player, entity.get(Keys.DISPLAY_NAME).orElse(Text.of(entity.getType().getTranslation())).toPlain().trim());
+        Event.Chatting triggerEvent = new Event.Chatting((Player) event.player, ((NPCChatting) event.npc).getName("en/us"));
         Sponge.getEventManager().post(triggerEvent);
     }
 
     @SubscribeEvent
     public void onBeatTrainer(BeatTrainerEvent event) {
-        Entity entity = (Entity) event.trainer;
-        Event.DefeatTrainer triggerEvent = new Event.DefeatTrainer((Player) event.player, event.trainer.level, entity.get(Keys.DISPLAY_NAME).orElse(Text.of(entity.getType().getTranslation())).toPlain().trim());
+        Event.DefeatTrainer triggerEvent = new Event.DefeatTrainer((Player) event.player, event.trainer.level, event.trainer.getName("en/us"));
         Sponge.getEventManager().post(triggerEvent);
     }
 
