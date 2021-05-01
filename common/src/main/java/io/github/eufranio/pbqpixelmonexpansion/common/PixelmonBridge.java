@@ -17,8 +17,8 @@ public interface PixelmonBridge {
     boolean hasSeen(User user, String species);
 
     boolean hasLevelPokemons(User user,
-                             String species,
-                             CheckMode speciesMode,
+                             String pokemonSpec,
+                             CheckMode pokemonMode,
                              int level,
                              CheckMode levelMode,
                              int amount,

@@ -43,10 +43,10 @@ public class ReforgedBridge implements PixelmonBridge {
     }
 
     @Override
-    public boolean hasLevelPokemons(User user, String species, CheckMode speciesMode, int level, CheckMode levelMode, int amount, CheckMode amountMode) {
+    public boolean hasLevelPokemons(User user, String pokemonSpec, CheckMode pokemonMode, int level, CheckMode levelMode, int amount, CheckMode amountMode) {
         PlayerPartyStorage storage = this.getStorage(user);
         int count = storage.findAll(poke -> {
-            if (speciesMode == CheckMode.EXACT && !poke.getSpecies().getPokemonName().equals(species))
+            if (pokemonMode == CheckMode.EXACT && !(new PokemonSpec(pokemonSpec).matches(poke)))
                 return false;
             if (levelMode == CheckMode.MIN && poke.getLevel() < level ||
                 levelMode == CheckMode.EXACT && poke.getLevel() != level ||
@@ -105,8 +105,8 @@ public class ReforgedBridge implements PixelmonBridge {
         if (event.wpp.controlledPokemon.isEmpty())
             return;
         PixelmonWrapper wrapper = event.wpp.controlledPokemon.get(0);
-        if (wrapper != null && wrapper.pokemon != null) {
-            Event.DefeatWildPokemon triggerEvent = new Event.DefeatWildPokemon((Player) event.player, spec -> new PokemonSpec(spec).matches(wrapper.pokemon));
+        if (wrapper != null && wrapper.entity != null) {
+            Event.DefeatWildPokemon triggerEvent = new Event.DefeatWildPokemon((Player) event.player, spec -> new PokemonSpec(spec).matches(wrapper.entity));
             Sponge.getEventManager().post(triggerEvent);
         }
     }

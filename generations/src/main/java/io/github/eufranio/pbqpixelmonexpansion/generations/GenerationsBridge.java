@@ -48,12 +48,12 @@ public class GenerationsBridge implements PixelmonBridge {
     }
 
     @Override
-    public boolean hasLevelPokemons(User user, String species, CheckMode speciesMode, int level, CheckMode levelMode, int amount, CheckMode amountMode) {
+    public boolean hasLevelPokemons(User user, String pokemonSpec, CheckMode pokeMode, int level, CheckMode levelMode, int amount, CheckMode amountMode) {
         PlayerStorage storage = this.getStorage(user);
         long count = Stream.of(storage.partyPokemon).filter(poke -> {
             if (poke == null)
                 return false;
-            if (speciesMode == CheckMode.EXACT && !poke.getString(NbtKeys.NAME).equals(species))
+            if (pokeMode == CheckMode.EXACT && !(new PokemonSpec(pokemonSpec).matches(poke)))
                 return false;
             if (levelMode == CheckMode.MIN && poke.getInteger(NbtKeys.LEVEL) < level ||
                     levelMode == CheckMode.EXACT && poke.getInteger(NbtKeys.LEVEL) != level ||

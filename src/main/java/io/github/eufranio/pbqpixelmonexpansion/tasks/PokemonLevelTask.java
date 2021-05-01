@@ -35,18 +35,39 @@ public class PokemonLevelTask implements BaseTask {
     public CheckMode levelMode = CheckMode.MAX;
 
     @Setting
-    public String species = "Pikachu";
+    public String pokemonSpec = "Pikachu b:Uncommon";
 
-    @Setting(comment = "Species check mode: Pokemon with an \"exact\" species or \"any\" species")
-    public CheckMode speciesMode = CheckMode.EXACT;
+    @Setting(comment = "Checking mode: \"any\" poke or a \"exact\" poke (checks the pokemonSpec)")
+    public CheckMode pokemonMode = CheckMode.ANY;
+
+    // Deprecated by pokemonSpec
+    @Setting @Deprecated
+    public String species = null;
+
+    // Deprecated by pokemonSpec
+    @Setting(comment = "Species check mode: Pokemon with an \"exact\" species or \"any\" species.\n" +
+            "DEPRECATED! Use pokemonSpec and pokemonMode instead!")
+    public CheckMode speciesMode = null;
 
     @Override
     public Text toText() {
         return Text.of(TextColors.GREEN, "Have ", TextColors.AQUA,
                 pokemonAmountMode == CheckMode.MIN ? "at least " : ( pokemonAmountMode == CheckMode.EXACT ? "exactly " : "max. "), pokemonAmount, " ",
                 levelMode == CheckMode.MIN ? "min lvl. " : levelMode == CheckMode.MAX ? "max lvl. " : "lvl. ", level, " ",
-                speciesMode == CheckMode.EXACT ? species : "Pokemon"
-                );
+                pokeMode() == CheckMode.EXACT ? species() : "Pokemon"
+        );
+    }
+
+    CheckMode pokeMode() {
+        if (pokemonMode != null)
+            return pokemonMode;
+        return speciesMode;
+    }
+
+    String species() {
+        if (pokemonSpec != null)
+            return pokemonSpec;
+        return species;
     }
 
     @Override
@@ -63,8 +84,8 @@ public class PokemonLevelTask implements BaseTask {
     public boolean isCompleted(PlayerData data, QuestLine line, Quest quest) {
         return PBQPixelmonExpansion.getInstance().getBridge().hasLevelPokemons(
                 data.getUser(),
-                species,
-                speciesMode,
+                species(),
+                pokeMode(),
                 level,
                 levelMode,
                 pokemonAmount,
