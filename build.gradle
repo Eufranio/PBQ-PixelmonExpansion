@@ -1,62 +1,81 @@
-buildscript {
-    repositories {
-        maven {
-            name = 'forge'
-            url = 'https://files.minecraftforge.net/maven'
-        }
-    }
-
-    dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
-    }
+plugins {
+    id 'dev.architectury.loom' version '1.9-SNAPSHOT' apply false
+    id 'architectury-plugin' version '3.4-SNAPSHOT'
+    id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
+    id "org.jetbrains.kotlin.jvm" version "2.0.21" apply false
 }
 
-plugins {
-    id 'org.spongepowered.plugin' version '0.9.0'
-    id 'com.github.johnrengelman.shadow' version '4.0.3'
+architectury {
+    minecraft = project.minecraft_version
 }
 
 allprojects {
-    apply plugin: 'net.minecraftforge.gradle.forge'
-    apply plugin: 'org.spongepowered.plugin'
-    apply plugin: 'java'
+    group = rootProject.maven_group
+    version = rootProject.mod_version
+}
 
-    dependencies {
-        compileOnly 'org.spongepowered:spongeapi:7.3.0-SNAPSHOT'
-        compileOnly 'com.github.Eufranio:PixelBuilt-Quests:3.3'
+subprojects {
+    apply plugin: 'dev.architectury.loom'
+    apply plugin: 'architectury-plugin'
+    apply plugin: 'maven-publish'
+    apply plugin: 'org.jetbrains.kotlin.jvm'
+
+    base {
+        // Set up a suffixed format for the mod jar names, e.g. `example-fabric`.
+        archivesName = "$rootProject.archives_name-$project.name"
     }
 
     repositories {
-        maven { url 'https://jitpack.io' }
+        // event-api
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+        maven { url "https://maven.impactdev.net/repository/development/" }
+        maven { url "https://thedarkcolour.github.io/KotlinForForge/" }
+        exclusiveContent {
+            forRepository {
+                maven {
+                    name = "Modrinth"
+                    url = "https://api.modrinth.com/maven"
+                }
+            }
+            filter {
+                includeGroup "maven.modrinth"
+            }
+        }
+        maven { url = 'https://jitpack.io' }
+        mavenLocal()
     }
 
-    minecraft {
-        // TODO: Configure Forge build here
-        forgeVersion = '1.12.2-14.23.5.2847'
-        // TODO: Replace with your mappings version, e.g. stable_39 or snapshot_20180814
-        mappings = 'stable_39'
+    dependencies {
+        minecraft "net.minecraft:minecraft:$rootProject.minecraft_version"
+        mappings loom.officialMojangMappings()
+    }
+
+    java {
+        // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
+        // if it is present.
+        // If you remove this line, sources will not be generated.
+        withSourcesJar()
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        it.options.release = 21
+    }
+
+    // Configure Maven publishing.
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                artifactId = base.archivesName.get()
+                from components.java
+            }
+        }
+
+        // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
+        repositories {
+            // Add repositories to publish to here.
+            // Notice: This block does NOT have the same function as the block in the top level.
+            // The repositories here will be used for publishing your artifact, not for
+            // retrieving dependencies.
+        }
     }
 }
-
-dependencies {
-    shadow project(':reforged')
-    shadow project(':generations')
-}
-
-shadowJar {
-    configurations = [project.configurations.shadow]
-    classifier = null
-
-    dependsOn reobfJar
-    dependsOn project(':generations').tasks.reobfJar
-    dependsOn project(':reforged').tasks.reobfJar
-
-    from sourceSets.main.output
-}
-
-build.dependsOn shadowJar
-
-group = pluginGroup
-version = pluginVersion
-
-sponge.plugin.id = pluginId

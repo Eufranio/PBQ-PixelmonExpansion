@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "pbq-pixelmonexpansion",
+  "version": "${version}",
+  "name": "pbq-pixelmonexpansion",
+  "description": "",
+  "authors": [
+    ""
+  ],
+  "contact": {
+    "homepage": ""
+  },
+  "license": "All-Rights-Reserved",
+  "icon": "assets/pbq-pixelmonexpansion/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "dev.eufranio.pbqpixelmonexpansion.fabric.PBQPixelmonExpansionFabric"
+    ]
+  },
+  "mixins": [
+    "pbq-pixelmonexpansion.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.10",
+    "minecraft": "~1.21.1",
+    "java": ">=21",
+    "architectury": ">=13.0.8",
+    "fabric-api": "*",
+    "pixelbuiltquests": ">=1.0.1"
+  }
+}
